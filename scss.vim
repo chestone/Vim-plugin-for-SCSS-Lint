@@ -1,11 +1,12 @@
-"============================================================================== 
+"==============================================================================
 " File:          scss.vim
 " Author:        Alvin Huynh (ahuynh@linkedin.com)
+" Contributor:   Cheston Lee (chestonlloyd@gmail.com)
 " Version:       0.1
-" Description:   SCSS Lint plugin for vim. 
-" Last Modified: May 8, 2013
+" Description:   SCSS Lint plugin for vim.
+" Last Modified: August 14, 2014
 "==============================================================================
- 
+
 
 " Check that this plugin only gets loaded once.
 if exists("g:scss_lint_vim")
@@ -29,7 +30,14 @@ endfunction
 " Run scsslint command on the current file opened.
 function! SCSSLint()
   let current_file = shellescape(expand('%s:p'))
-  let cmd = "scsslint " . current_file
-  let output = system(cmd)
-  echo output
+  if filereadable("./.scss-lint.yml")
+    let config = './.scss-lint.yml'
+  else
+    let config = '~/.scss-lint.yml'
+  endif
+  if config
+    let cmd = "scss-lint -c " . config . ' ' . current_file
+    let output = system(cmd)
+    echo output
+  endif
 endfunction
